@@ -1,22 +1,20 @@
 # Usar uma imagem base oficial do Python
 FROM python:3.9-slim
 
-# Definir o diretório de trabalho
+# Definir o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copiar dependências
-COPY requirements.txt requirements.txt
+# Copiar o arquivo de dependências para o container
+COPY requirements.txt .
 
-# Instalar dependências
-RUN pip install -r requirements.txt
+# Instalar as dependências da aplicação
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar os arquivos da API para o container
+# Copiar todos os arquivos do projeto para dentro do container
 COPY . .
 
-# Expor a porta 1313
+# Expor a porta 1313 que a API vai usar
 EXPOSE 1313
 
-# Comando para rodar a aplicação
+# Comando para iniciar a aplicação
 CMD ["python", "app.py"]
-
-
