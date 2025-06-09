@@ -51,35 +51,7 @@ jobs:
     needs: test  # Executa deploy só se o teste passar
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: DEPLOY
+        run: curl -X POST https://api.render.com/deploy/srv-d136tvbuibrs73fsikkg?key=IKBL5vpxMCs
 
-      - name: Check Docker version
-        run: docker --version
-
-      - name: Check secrets presence
-        run: |
-          echo "DOCKER_USERNAME is set: ${{ secrets.DOCKER_USERNAME != '' }}"
-          echo "DOCKER_PASSWORD is set: ${{ secrets.DOCKER_PASSWORD != '' }}"
-          echo "SERVER_HOST is set: ${{ secrets.SERVER_HOST != '' }}"
-          echo "SERVER_USER is set: ${{ secrets.SERVER_USER != '' }}"
-          echo "SERVER_SSH_KEY is set: ${{ secrets.SERVER_SSH_KEY != '' }}"
-
-      - name: Docker login (manual to get more logs)
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
-      - name: Tag and push Docker image
-        run: |
-          docker tag my-flask-api mydockerhubuser/my-flask-api:latest
-          docker push mydockerhubuser/my-flask-api:latest
-
-      - name: Deploy to server via SSH
-        uses: appleboy/ssh-action@v0.1.7
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            set -x  # mostra cada comando para ajudar no debug
-            docker pull mydockerhubuser/my-flask-api:latest
-            docker-compose -f /path/to/docker-compose.yml up -d
+      
