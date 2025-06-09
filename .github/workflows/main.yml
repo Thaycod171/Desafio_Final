@@ -22,6 +22,12 @@ jobs:
         run: |
           pip install -r lab_api/requirements.txt
 
+      - name: Start Flask app
+        run: |
+          export JWT_SECRET_KEY=your_secret_key
+          python lab_api/app.py &
+          sleep 5  # Aguarda o app subir
+
       - name: Run tests
         run: |
           python -m unittest discover -s lab_api -p "test_*.py"
