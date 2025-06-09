@@ -7,22 +7,19 @@ class APINewTests(unittest.TestCase):
     def setUpClass(cls):
         cls.client = app.test_client()
 
-    def cadastro_com_dados(self):
-        # Testa a criação de um novo usuário com dados simulados
+    def test_cadastro_com_dados(self):
         response = self.client.post('/register', json={
             'username': 'testeuser',
             'password': '123456'
         })
-        self.assertIn(response.status_code, [200, 201, 409])  # depende se já existe
+        self.assertIn(response.status_code, [200, 201, 409]) 
         self.assertIn('message', response.json)
 
-    def metodo_nao_permitido(self):
-        # Envia um método errado para uma rota específica
+    def test_metodo_nao_permitido(self):
         response = self.client.put('/login')
         self.assertEqual(response.status_code, 405)
 
-    def acesso_com_token_invalido(self):
-        # Tenta acessar uma rota protegida com token inválido
+    def test_acesso_com_token_invalido(self):
         response = self.client.get('/protected', headers={
             'Authorization': 'Bearer token_invalido'
         })
